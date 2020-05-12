@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Login with Google &mdash; a PoC</title>
+    <script src="hello.all.js"></script>
+    <script>
+      hello.init({
+          google: "438171871356-1u3gmpvk9h8q9jo50q2dg50eq6phe64g.apps.googleusercontent.com"
+      });
+
+      hello.on('auth.login', function (auth) {
+
+          // add a greeting and access the thumbnail and name from
+          // the authorized response
+
+          hello(auth.network).api('/me').then(function (resp) {
+	          var lab = document.createElement("div");
+	          lab.id = "pic_and_greet";
+	          lab.innerHTML = '<img src="' + resp.thumbnail + '" /> Hey ' + resp.name;
+	          document.body.appendChild(lab);
+          });
+      });
+
+      // remove the greeting when we log out
+
+      hello.on('auth.logout', function () {
+          var lab = document.getElementById("pic_and_greet");
+          if (lab != null) document.body.removeChild( lab );
+      });
+    </script>
+  </head>
+  <body>
+    <p><form>
+        <button onclick="hello('google').login()">google</button>
+        <button onclick="hello('google').logout()">logout</button>
+    </form></p>
+</html>

@@ -1,0 +1,8 @@
+- name: uninstall kodi
+  hosts: pi
+
+  tasks:
+  - name: ensure kodi is uninstalled
+    apt:
+      name: kodi
+      state: absent

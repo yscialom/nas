@@ -1,0 +1,9 @@
+- name: install kodi
+  hosts: pi
+
+  tasks:
+  - name: ensure kodi is at the latest version
+    become: yes
+    apt:
+      name: kodi
+      state: latest

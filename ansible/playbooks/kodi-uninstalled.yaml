@@ -1,0 +1,14 @@
+- name: uninstall kodi
+  hosts: pi
+
+  tasks:
+  - name: ensure kodi is uninstalled
+    become: yes
+    apt:
+      name: kodi
+      state: absent
+  - name: clean kodi additional packages
+    become: yes
+    apt:
+      autoremove: yes
+      purge: yes

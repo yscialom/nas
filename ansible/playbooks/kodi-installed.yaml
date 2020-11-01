@@ -7,3 +7,8 @@
     apt:
       name: kodi
       state: latest
+  - name: ensure a kodi desktop shortcut exists
+    copy:
+      remote_src: yes
+      src: /usr/share/applications/kodi.desktop
+      dest: ~/Desktop/kodi.desktop

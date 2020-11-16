@@ -1,5 +1,5 @@
 all:
   hosts:
     pi:
-      ansible_host: 192.168.1.12
+      ansible_host: @PINANAS_HOST@
       ansible_user: pi

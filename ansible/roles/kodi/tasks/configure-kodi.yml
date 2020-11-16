@@ -1,0 +1,31 @@
+---
+- name: initialise kodi configuration
+  become: yes
+  shell: |
+    userdata_file=/home/kodi/.kodi/userdata/guisettings.xml
+
+    # if the configuration exists, do nothing
+    [[ -f ${userdata_file} ]] && exit 0
+
+    # start kodi for it to create its configuration files
+    su kodi -c '/usr/bin/kodi-standalone &'
+
+    # wait for the configuration to exist
+    function wait_file () {
+      local file=${1}
+      while [[ ! -f ${file} ]] ; do sleep 5 ; done
+      test -f ${file} ; exit # 0 if file exists, >0 otherwise
+    }
+    export -f wait_file ; timeout 30s bash -c "wait_file ${userdata_file}"
+
+    # stop kodi processes
+    killall --user kodi --wait --regexp 'kodi.*'
+  args:
+    executable: /bin/bash
+
+- name: enable kodi remote control
+  become: yes
+  replace:
+    path: /home/kodi/.kodi/userdata/guisettings.xml
+    regexp: <setting id="services.webserver"[^>]*>false</setting>
+    replace: <setting id="services.webserver">true</setting>

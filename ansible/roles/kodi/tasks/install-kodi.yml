@@ -1,0 +1,16 @@
+---
+- name: create kodi user
+  become: yes
+  user:
+    create_home: yes
+    #generate_ssh_key: yes
+    groups: audio,bluetooth,input,plugdev,video
+    name: kodi
+    shell: /bin/bash
+    system: no
+
+- name: ensure kodi is at the latest version
+  become: yes
+  apt:
+    name: kodi
+    state: latest

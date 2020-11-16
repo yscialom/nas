@@ -1,0 +1,4 @@
+---
+- include: install-kodi.yml
+- include: configure-kodi.yml
+- include: autostart-kodi.yml

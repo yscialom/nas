@@ -1,0 +1,28 @@
+- name: remove steamlink through kodi
+  hosts: pi
+
+  tasks:
+  - name: disable kodi "unkown source" installation
+    become: yes
+    replace:
+      path: /home/kodi/.kodi/userdata/guisettings.xml
+      regexp: <setting id="addons.unknownsources"[^>]*>true</setting>
+      replace: <setting id="addons.unknownsources" default="true">false</setting>
+
+  - name: stopping kodi
+    become: yes
+    systemd:
+      name: kodi
+      state: stopped
+
+  - name: remove steamlink
+    become: yes
+    apt:
+      name: kodi
+      state: absent
+
+  - name: give sudo permission for kodi to run steamlink
+    become: yes
+    file:
+      path: /etc/sudoers.d/steamlink-kodi
+      state: absent

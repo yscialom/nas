@@ -2,15 +2,29 @@
   hosts: pi
 
   tasks:
+  - name: create kodi user
+    become: yes
+    user:
+      create_home: yes
+      generate_ssh_key: yes
+      groups: audio,bluetooth,input,plugdev,video
+      name: kodi
+      shell: /bin/bash
+      system: no
+
+  - name: kodi autologin
+    debug:
+      msg: TODO
+
   - name: ensure kodi is at the latest version
     become: yes
     apt:
       name: kodi
       state: latest
-  - name: ensure a kodi desktop shortcut exists
-    copy:
-      remote_src: yes
-      src: /usr/share/applications/kodi.desktop
-      dest: ~/Desktop/kodi.desktop
+
   - name: enable kodi remote control
-    shell: sed -i 's@<setting id="services.webserver"\([^>]*\)>false</setting>@<setting id="services.webserver">true</setting>@' .kodi/userdata/guisettings.xml
+    become: yes
+    replace:
+      path: /home/kodi/.kodi/userdata/guisettings.xml
+      regexp: <setting id="services.webserver"[^>]*>false</setting>
+      replace: <setting id="services.webserver">true</setting>

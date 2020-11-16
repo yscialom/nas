@@ -7,12 +7,21 @@
     apt:
       name: kodi
       state: absent
+
   - name: clean kodi additional packages
     become: yes
     apt:
       autoremove: yes
       purge: yes
+
   - name: clean kodi additional files
     file:
       path: ~/Desktop/kodi.desktop
       state: absent
+
+  - name: remove kodi user
+    become: yes
+    user:
+      name: kodi
+      state: absent
+      force: yes

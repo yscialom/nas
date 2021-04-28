@@ -4,7 +4,7 @@
   user:
     create_home: yes
     #generate_ssh_key: yes
-    groups: audio,bluetooth,input,plugdev,video
+    groups: audio,video,input,dialout,plugdev,netdev,users,cdrom,tty
     name: kodi
     shell: /bin/bash
     system: no

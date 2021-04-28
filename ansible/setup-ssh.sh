@@ -10,4 +10,4 @@ echo "  - create ansible host file $(readlink -f ${host_file})"
 sed "s/@PINANAS_HOST@/${pinanas_host}/" <${host_file}.in >${host_file}
 
 echo "  - allow ${USER}@${HOSTNAME} to connect to pi@${pinanas_host} with an ssh key"
-echo "    TODO"
+ssh-copy-id pi@${pinanas_host}

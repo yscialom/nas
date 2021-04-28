@@ -1,0 +1,26 @@
+- name: give sudo permission for kodi to run steamlink
+  become: yes
+  template:
+    src: kodi-steamlink-sudoers
+    dest: /etc/sudoers.d/steamlink-kodi
+    owner: root
+    mode: 0644
+
+- name: stopping kodi
+  become: yes
+  systemd:
+    name: kodi
+    state: stopped
+
+- name: enable kodi "unkown source" installation
+  become: yes
+  replace:
+    path: /home/kodi/.kodi/userdata/guisettings.xml
+    regexp: <setting id="addons.unknownsources"[^>]*>false</setting>
+    replace: <setting id="addons.unknownsources">true</setting>
+
+- name: restart kodi
+  become: yes
+  systemd:
+    name: kodi
+    state: started

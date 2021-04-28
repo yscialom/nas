@@ -1,0 +1,22 @@
+---
+- name: download steamlink launcher plugin for kodi
+  get_url:
+    checksum: "sha256:aeebf26ab2b309acf7b4659246089ac3f69311ecf8872bb5a0d1ffe35ebff45a"
+    url: "https://github.com/swetoast/steamlink-launcher/releases/download/0.0.9/plugin.program.steamlink-v0.0.9.zip"
+    dest: /tmp/.
+
+- name: install steamlink launcher plugin
+  become: yes
+  unarchive:
+    remote_src: yes
+    src: /tmp/plugin.program.steamlink-v0.0.9.zip
+    dest: /home/kodi/.kodi/addons
+    group: kodi
+    owner: kodi
+    mode: 0755
+
+- name: restart kodi
+  become: yes
+  systemd:
+    name: kodi
+    state: restarted

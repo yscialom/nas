@@ -4,14 +4,14 @@
   vars:
     # Nextcloud
     nextcloud_domain: "cloud.home.scialom.org"
+    nextcloud_instanceid: "{{ nextcloud_domain }}"
     nextcloud_admin_user: "admin"
-    nextcloud_admin_password: "notsecurepassword"
-    nextcloud_instanceid: "somerandomshit"
-    nextcloud_passwordsalt: "notsecurepasswordsalt"
-    nextcloud_secret: "notsecuresecret"
-    nextcloud_dbpassword: "notsecurepassword"
+    nextcloud_admin_password: "changeme"
+    nextcloud_passwordsalt: "{{ lookup('password', '/tmp/.nextcloud_passwordsalt') }}"
+    nextcloud_secret:       "{{ lookup('password', '/tmp/.nextcloud_secret') }}"
+    nextcloud_dbpassword:   "{{ lookup('password', '/tmp/.nextcloud_dbpassword') }}"
     # Let's Encrypt
-    acme_sh_path: "/tmp/acme.sh"
+    acme_sh_path: "/root/acme.sh"
     ssl_domain: "{{ nextcloud_domain }}"
     ssl_key_file: "/etc/nginx/{{ ssl_domain }}-key.pem"
     ssl_fullchain_file: "/etc/nginx/{{ ssl_domain }}.pem"
@@ -137,6 +137,7 @@
           - gpg
           - gpg-agent
           - sudo
+          - acl
         state: present
 
   roles:

@@ -4,12 +4,12 @@
   vars:
     # Nextcloud
     nextcloud_domain: "cloud.home.scialom.org"
-    nextcloud_instanceid: "{{ nextcloud_domain }}"
+    nextcloud_instanceid: "{{ nextcloud_domain | regex_replace('[^a-z0-9-]', '-') }}"
     nextcloud_admin_user: "admin"
-    nextcloud_admin_password: "changeme"
-    nextcloud_passwordsalt: "{{ lookup('password', '/tmp/.nextcloud_passwordsalt') }}"
-    nextcloud_secret:       "{{ lookup('password', '/tmp/.nextcloud_secret') }}"
-    nextcloud_dbpassword:   "{{ lookup('password', '/tmp/.nextcloud_dbpassword') }}"
+    nextcloud_admin_password: "{{ lookup('password', '/tmp/.nextcloud_admin_password') }}"
+    nextcloud_passwordsalt:   "{{ lookup('password', '/tmp/.nextcloud_passwordsalt') }}"
+    nextcloud_secret:         "{{ lookup('password', '/tmp/.nextcloud_secret') }}"
+    nextcloud_dbpassword:     "{{ lookup('password', '/tmp/.nextcloud_dbpassword') }}"
     # Let's Encrypt
     acme_sh_path: "/root/acme.sh"
     ssl_domain: "{{ nextcloud_domain }}"
@@ -138,6 +138,7 @@
           - gpg-agent
           - sudo
           - acl
+          - socat
         state: present
 
   roles:
@@ -150,3 +151,7 @@
     - { role: geerlingguy.mysql, become: yes }
     - { role: nierdz.nextcloud, become: yes }
     - steamlink
+  tasks:
+    - name: End message
+      debug:
+        msg: "Nextcloud is installed and running. You can now log as 'admin' at 'https://{{ nextcloud_domain }}' with password '{{ nextcloud_admin_password }}'."
